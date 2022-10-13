@@ -1,0 +1,39 @@
+{
+  "name": "arthapassbackend",
+  "version": "1.0.0",
+  "description": "backend for artha pass",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "backendtests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Exsius/ArthaPass.git"
+  },
+  "keywords": [
+    "password"
+  ],
+  "author": "Christopher Pravlik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Exsius/ArthaPass/issues"
+  },
+  "homepage": "https://github.com/Exsius/ArthaPass#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-redis": "^6.1.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.3",
+    "passport": "^0.6.0",
+    "redis": "^4.3.1",
+    "sequelize": "^6.25.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.20"
+  }
+}
