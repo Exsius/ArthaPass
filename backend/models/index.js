@@ -1,7 +1,10 @@
-import { Sequelize } from 'sequelize'
+import { Sequelize, ValidationErrorItemType } from 'sequelize'
+import userModel from './user.model.js'
+import noteModel from './note.model.js'
 
-// const sequelize = new Sequelize(
-//     `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
-//         logging: false
-//     }
-// )
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {dialect: 'mysql'})
+
+export const User = userModel(Sequelize, sequelize) 
+export const Note = noteModel(Sequelize, sequelize)
+
+sequelize.sync()
