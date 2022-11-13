@@ -1,0 +1,20 @@
+FROM node:latest
+
+WORKDIR /usr/app
+
+COPY package*.json ./
+
+RUN npm install -g npm
+
+# dumb dumb workaround
+RUN npm install -g react-scripts@5.0.1
+
+RUN npm ci -qy
+
+RUN npm i react
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]

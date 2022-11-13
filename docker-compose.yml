@@ -1,0 +1,67 @@
+version: '2'
+
+services:
+  backend:
+    build:
+      context: ./backend/
+    volumes:
+      - ./backend/:/usr/app
+      - node_modules:/usr/app/node_modules
+    ports:
+      - "6000:6000"
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - db
+    networks:
+      - app-network
+  frontend:
+    build:
+      context: ./frontend/
+    command: npm start
+    # stdin_open: true
+    # tty: true
+    volumes:
+      - ./frontend/:/usr/app
+      - node_modules:/usr/app/node_modules
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+  redis:
+    restart: unless-stopped
+    image: redis:6-alpine
+    command: --requirepass ${REDIS_PASSWORD}
+    expose:
+      - '${REDIS_PORT}'
+    env_file:
+      - .env
+    networks:
+      - app-network
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+    networks:
+      - app-network
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  node_modules:
