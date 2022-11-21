@@ -38,6 +38,9 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded'
 import PublishRoundedIcon from '@mui/icons-material/PublishRounded'
 
+import FlareIcon from '@mui/icons-material/Flare';
+import PlaceIcon from '@mui/icons-material/Place';
+
 export const Navbar = (props) => {
 
     const navigate = useNavigate()
@@ -195,7 +198,7 @@ export const Navbar = (props) => {
     
     const pageTitles = {
         '/dashboard': {
-            name: 'My Dashboard',
+            name: 'Green Bee',
             mobileComponents: mobileComponents[0],
             headComponents: (
                 <Typography
@@ -211,9 +214,19 @@ export const Navbar = (props) => {
             ),
             navlinks: [
                 {
-                    name: "Dashboard",
+                    name: "Settings",
                     link: "/dashboard",
-                    icon: <DashboardRoundedIcon color="inherit" />
+                    icon: <AccountCircleRoundedIcon color="inherit" />
+                },
+                {
+                    name: "Discover",
+                    link: "/dashboard",
+                    icon: <FlareIcon color="inherit" />
+                },
+                {
+                    name: "Favorites",
+                    link: "/dashboard",
+                    icon: <PlaceIcon color="inherit" />
                 },
             ],
             tailComponents: [
@@ -239,8 +252,8 @@ export const Navbar = (props) => {
 
     const drawerItems = [
         {
-            name: "Dashboard",
-            icon: <HomeRoundedIcon color="secondarydark" />,
+            name: "Discover",
+            icon: <FlareIcon color="secondarydark" />,
             link: "/",
         },
     ]
@@ -501,7 +514,7 @@ export const Navbar = (props) => {
                 <Box
                 sx={{
                     flexGrow: 1, 
-                    py: { xs: 1, sm: 2, md: 6 },
+                    // py: { xs: 1, sm: 2, md: 6 },
                     px: { xs: 0, sm: 1, md: 3 },
                     width: { sm: `calc(100% - ${drawerWidth}px)`, },
                     mt: '64px',
