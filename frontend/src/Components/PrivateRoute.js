@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import React from "react";
+import { Route, Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../Context/UserContext";
+import Login from '../Pages/Login.js';
 
-const PrivateRoute = () => {
-  const { user } = useAuth()
-  return user ? <Outlet /> : <Navigate to="/login" />
-}
-
-export default PrivateRoute
+export default function PrivateRoute({ component: Component, ...rest }) {
+    const { user } = useAuth()
+  
+    return user && Object.keys(user).length !== 0 ? <Outlet /> : <Login />
+  }

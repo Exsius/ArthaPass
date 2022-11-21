@@ -1,8 +1,6 @@
 import { useState, createContext, useContext, useEffect } from 'react'
 import axios from 'axios'
 
-import Loading from '../Pages/Loading.js'
-
 const UserContext = createContext()
 
 export const useAuth = () => {
@@ -12,55 +10,71 @@ export const useAuth = () => {
 const UserProvider = (props) => {
     const [user, setUser] = useState()
     const [loading, setLoading] = useState(true)
+    const [userInfo, setUserInfo] = useState({})
+    const [organizationInfo, setOrganizationInfo] = useState({})
+    const [activeSnackbar, setActiveSnackbar] = useState()
+    const [navbarAction, setNavbarAction] = useState()
+    const [params, setParams] = useState()
 
-    const login = (username, password) => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const { data } = await axios.post('/api/login', {
-                    username: username,
-                    password: password,
-                })
-                setUser(data)
-                resolve()
-            } catch (err) {
-                return reject(err.request.response)
-            }
+    const login = async (username, password) => {
+        const result = await axios.post('/api/login', {
+            username: username,
+            password: password,
         })
-    }
-
-    const logout = async () => {
-        try {
-            setUser(null)
-            await axios.post('/api/logout')
-        } catch (err) {
-            return err.response.data
+        if (result.data.error) {
+            return result.data.error
+        } else {
+            setUser(result.data)
         }
     }
 
-    useEffect(() => {
-        axios.post('/api/auth')
-        .then(res => {
-            setUser({ id: res.data.id })
-            setLoading(false)
+    const register = async (fname, lname, username, password) => {
+        const result = await axios.post('/api/register', {
+            fname: fname.value,
+            lname: lname.value,
+            email: username.value,
+            password: password.value
         })
-        .catch(err => {
-            setLoading(false)
+        return result.data
+    }
+
+    const logout = async () => {
+        const result = await axios.post('/api/logout')
+        setUser(null)
+        return result.data.success
+    }
+
+    useEffect(() => {
+        axios.get('/api/auth').then(res => {
+            if (!res.data.error) {
+                setUser(res.data)
+                setLoading(false)
+            } else {
+                setLoading(false)
+            }
         })
     }, [])
 
     const value = {
         user,
         login,
+        register,
         logout,
+        activeSnackbar,
+        setActiveSnackbar,
+        userInfo,
+        setUserInfo,
+        organizationInfo,
+        setOrganizationInfo,
+        navbarAction,
+        setNavbarAction,
+        params,
+        setParams
     }
 
     return (
         <UserContext.Provider value={value}>
-            {!loading ? 
-            props.children
-            :
-            <Loading />
-            }
+            {!loading && props.children}
         </UserContext.Provider>
     )
 }

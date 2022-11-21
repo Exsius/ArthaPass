@@ -1,11 +1,12 @@
-import { User } from '../models/index.js'
-import bcrypt from 'bcrypt'
+import { user } from '../models/index.js'
+import bcrypt from 'bcryptjs'
 import passport from 'passport'
 import LocalStrategy from 'passport-local'
+import jwt from 'jsonwebtoken'
 
-export default passport.use(new LocalStrategy(async (username, password, callback) => {
+const use = passport.use(new LocalStrategy(async (username, password, callback) => {
 
-    const selectedUser = await User.findOne({ where: { username: username } })
+    const selectedUser = await user.findOne({ where: { email: username } })
 
     if (selectedUser) {
         bcrypt.compare(password, selectedUser.password, (err, match) => {
@@ -22,9 +23,11 @@ export default passport.use(new LocalStrategy(async (username, password, callbac
 }))
 
 export const serializeUser = passport.serializeUser((user, callback) => {
-    callback(null, user)
+    callback(null, { id: user.id, email: user.email })
 })
 
 export const deserializeUser = passport.deserializeUser((user, callback) => {
     callback(null, user)
 })
+
+export default use

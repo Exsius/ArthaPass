@@ -1,0 +1,16 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  /* background-color: #eeeeee; */
+  /* background-color: #116ba6; */
+  height: 100vh;
+  /* background-image: linear-gradient(to top, #1e3c72 0%, #1e3c72 1%, #2a5298 100%); */
+  /* background-image: radial-gradient( circle 902px at 10% 20%,  rgba(18,50,90,1) 0%, rgba(207,199,252,1) 100.2% ); */
+  /* background-image: radial-gradient( circle 1502px at 10% 20%,  rgb(137, 85, 26) 0%, rgb(59, 76, 154)); */
+  /* background-color: black;
+  background-image: radial-gradient( circle 1402px at 10% 20%,  rgb(57, 34, 9) 0%, rgb(33, 33, 47)); */
+  background-color: #6C5A49;
+  /* background-image: linear-gradient(60deg, #29323c 0%, #485563 100%); */
+  /* background-image: linear-gradient(-20deg, #2b5876 0%, #4e4376 100%); */
+}

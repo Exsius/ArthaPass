@@ -1,43 +1,21 @@
-version: '2'
-
 services:
-  backend:
-    build:
-      context: ./backend/
-    volumes:
-      - ./backend/:/usr/app
-      - backend_node_modules:/usr/app/node_modules
+  db:
+    image: postgres:14.1-alpine
+    container_name: arthapass_database
+    restart: unless-stopped
     ports:
-      - "6000:6000"
-    env_file: .env
+      - '${DB_PORT}:${DB_PORT}'
     environment:
-      CHOKIDAR_USEPOLLING: 'true'
-      DB_HOST: '${DB_HOST}'
-      DB_USER: '${DB_USER}'
-      DB_PASSWORD: '${DB_PASSWORD}'
-      DB_NAME: '${DB_NAME}'
-      SESSION_SECRET: '${SESSION_SECRET}'
-      NODE_ENV: 'development'      
-    depends_on:
-      - db
+      POSTGRES_USER: '${DB_USER}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+      POSTGRES_DB: '${DB_NAME}'
     networks:
       - app-network
-  frontend:
-    build:
-      context: ./frontend/
-    command: npm start
-    stdin_open: 'true'
-    tty: 'true'
     volumes:
-      - ./frontend/:/usr/app
-      - frontend_node_modules:/usr/app/node_modules
-    depends_on:
-      - backend
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
+      - db_data:/var/lib/postgresql/data
+
   redis:
+    container_name: arthapass_redis
     restart: unless-stopped
     image: redis:6-alpine
     command: --requirepass ${REDIS_PASSWORD}
@@ -47,33 +25,69 @@ services:
       - .env
     networks:
       - app-network
-  db:
-    image: mariadb
-    restart: always
-    environment:
-      MARIADB_ROOT_PASSWORD: example
-      MARIADB_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-    networks:
-      - app-network
-  phpmyadmin:
-    image: phpmyadmin
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+
+  backend:
+    container_name: arthapass_backend
+    restart: unless-stopped
+    build:
+      context: .
     ports:
-      - ${DB_PORT}:80
+      - '3000:3000'
     environment:
-      - PMA_ARBITRARY=1
+      REDIS_HOST: redis
+      DB_HOST: '${DB_HOST}'
+      DB_USER: '${DB_USER}'
+      DB_PASSWORD: '${DB_PASSWORD}'
+      DB_NAME: '${DB_NAME}'
+      SESSION_SECRET: '${SESSION_SECRET}'
+      NODE_ENV: 'production'
+    env_file:
+      - .env
+    depends_on:
+      - db
     networks:
       - app-network
+
+  webserver:
+    image: nginx:mainline-alpine
+    container_name: arthapass_webserver
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      # - '443:443'
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ./dhparam:/etc/ssl/certs
+      - ./ssl:/etc/letsencrypt/live/${DOMAIN_NAME}
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: arthapass_certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email ${DOMAIN_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${DOMAIN_NAME} --staging
+
+volumes:
+  backend_data:
+  db_data:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+  dhparam:
+    driver: local
 
 networks:
   app-network:
     driver: bridge
 
-volumes:
-  backend_node_modules:
-  frontend_node_modules:
+version: '1.0'

@@ -1,0 +1,28 @@
+{
+  "name": "arthapass",
+  "version": "1.0.0",
+  "description": "hack the change 2022",
+  "main": "ecosystem.config.js",
+  "scripts": {
+    "install:frontend": "cd frontend && npm i --force",
+    "install:backend": "cd backend && npm i",
+    "build": "cd frontend && npm run build",
+    "dev": "concurrently 'cd frontend && npm start' 'cd backend && npm run dev'",
+    "start": "cd backend && node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Christopher Pravlik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chris-Pyy/ArthaPass/issues"
+  },
+  "homepage": "https://github.com/Chris-Pyy/Green-be#readme",
+  "dependencies": {
+    "jwt-decode": "^3.1.2",
+    "react-resizable": "^3.0.4",
+    "react-scroll-sync": "^0.11.0"
+  }
+}

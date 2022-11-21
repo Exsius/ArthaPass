@@ -5,10 +5,13 @@ const user = (Sequelize, sequelize) => {
             autoIncrement: true,
             primaryKey: true,
         },
-        authority: {
-            type: Sequelize.INTEGER,
+        fname: {
+            type: Sequelize.STRING,
         },
-        username: {
+        lname: {
+            type: Sequelize.STRING,
+        },
+        email: {
             type: Sequelize.STRING,
         },
         password: {
