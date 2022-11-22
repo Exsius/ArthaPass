@@ -38,8 +38,8 @@ import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRound
 import SaveRoundedIcon from '@mui/icons-material/SaveRounded'
 import PublishRoundedIcon from '@mui/icons-material/PublishRounded'
 
-import FlareIcon from '@mui/icons-material/Flare';
-import PlaceIcon from '@mui/icons-material/Place';
+import NotesIcon from '@mui/icons-material/Notes';
+
 
 export const Navbar = (props) => {
 
@@ -198,7 +198,7 @@ export const Navbar = (props) => {
     
     const pageTitles = {
         '/dashboard': {
-            name: 'Green Bee',
+            name: 'Artha Pass',
             mobileComponents: mobileComponents[0],
             headComponents: (
                 <Typography
@@ -217,16 +217,6 @@ export const Navbar = (props) => {
                     name: "Settings",
                     link: "/dashboard",
                     icon: <AccountCircleRoundedIcon color="inherit" />
-                },
-                {
-                    name: "Discover",
-                    link: "/dashboard",
-                    icon: <FlareIcon color="inherit" />
-                },
-                {
-                    name: "Favorites",
-                    link: "/dashboard",
-                    icon: <PlaceIcon color="inherit" />
                 },
             ],
             tailComponents: [
@@ -252,8 +242,13 @@ export const Navbar = (props) => {
 
     const drawerItems = [
         {
-            name: "Discover",
-            icon: <FlareIcon color="secondarydark" />,
+            name: "Home",
+            icon: <HomeRoundedIcon color="secondarydark" />,
+            link: "/",
+        },
+        {
+            name: "Notes",
+            icon: <NotesIcon color="secondarydark" />,
             link: "/",
         },
     ]
@@ -519,7 +514,7 @@ export const Navbar = (props) => {
                     width: { sm: `calc(100% - ${drawerWidth}px)`, },
                     mt: '64px',
                     mr: { sm: loggedin && '16px' },
-                    height: loggedin ? { xs: 'calc(100vh -  136px)', sm: 'calc(100vh - 164px)', md: 'calc(100vh - 192px)' } : 'calc(100vh - 160px)',
+                    height: loggedin ? { xs: 'calc(100vh -  120px)', sm: 'calc(100vh - 130px)', md: 'calc(100vh - 100px)' } : 'calc(100vh - 160px)',
                     borderRadius: { sm: '12px 12px 0px 0px', md: '12px' },
                     backgroundImage: 'linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)',
                     //backgroundColor: 'neutral.main',
