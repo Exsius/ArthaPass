@@ -70,6 +70,30 @@ const Dashboard = () => {
             ],
             lastUsed: 'ldsapdw',
             favicon: 'img',
+            status: 'reused',
+        },
+        {
+            site: 'www.google.com',
+            username: 'username',
+            tags: [
+                'tag1',
+                'tag2',
+                'tag3',
+            ],
+            lastUsed: 'ldsapdw',
+            favicon: 'img',
+            status: 'reused',
+        },
+        {
+            site: 'www.google.com',
+            username: 'username',
+            tags: [
+                'tag1',
+                'tag2',
+                'tag3',
+            ],
+            lastUsed: 'ldsapdw',
+            favicon: 'img',
             status: 'breached',
         },
     ]
@@ -159,51 +183,56 @@ const Dashboard = () => {
                         Last Used
                     </Typography>
                 </Stack>
-                <List>
-                    {pwdAccounts.map((account) => (
-                        pwdFilters.indexOf(account.status) === currPwdFilter | currPwdFilter === 0 &&
-                        <>
-                            <ListItemButton>
-                                <Stack
-                                direction='row'
-                                alignItems='center'
-                                justifyContent='space-between'
-                                sx={{ width: '100%' }}
-                                >
+                <Box
+                height='374px'
+                overflow='scroll'
+                >
+                    <List>
+                        {pwdAccounts.map((account) => (
+                            pwdFilters.indexOf(account.status) === currPwdFilter | currPwdFilter === 0 &&
+                            <>
+                                <ListItemButton>
                                     <Stack
                                     direction='row'
-                                    spacing={3}
-                                    width='120px'
+                                    alignItems='center'
+                                    justifyContent='space-between'
+                                    sx={{ width: '100%' }}
                                     >
-                                        <Box>
-                                            {account.favicon}
-                                        </Box>
-                                        <Stack>
-                                            <Typography>
-                                                {account.site}
-                                            </Typography>
-                                            <Typography>
-                                                {account.username}
-                                            </Typography>
+                                        <Stack
+                                        direction='row'
+                                        spacing={3}
+                                        width='120px'
+                                        >
+                                            <Box>
+                                                {account.favicon}
+                                            </Box>
+                                            <Stack>
+                                                <Typography>
+                                                    {account.site}
+                                                </Typography>
+                                                <Typography>
+                                                    {account.username}
+                                                </Typography>
+                                            </Stack>
                                         </Stack>
+                                        <Stack
+                                        direction='row'
+                                        sx={{ width: '128px', flexWrap: 'wrap' }}
+                                        >
+                                            {account.tags.map((tag) => (
+                                                <Chip label={tag} variant='outlined' />
+                                            ))}
+                                        </Stack>
+                                        <Typography>
+                                            {account.lastUsed}
+                                        </Typography>
                                     </Stack>
-                                    <Stack
-                                    direction='row'
-                                    sx={{ width: '128px', flexWrap: 'wrap' }}
-                                    >
-                                        {account.tags.map((tag) => (
-                                            <Chip label={tag} variant='outlined' />
-                                        ))}
-                                    </Stack>
-                                    <Typography>
-                                        {account.lastUsed}
-                                    </Typography>
-                                </Stack>
-                            </ListItemButton>
-                            <Divider />
-                        </>
-                    ))}
-                </List>
+                                </ListItemButton>
+                                <Divider />
+                            </>
+                        ))}
+                    </List>
+                </Box>
             </Stack>
         </Stack>
     )
