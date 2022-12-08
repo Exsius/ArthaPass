@@ -1,29 +1,32 @@
-const user = (Sequelize, sequelize) => {
-    return sequelize.define("users", {
+const password = (Sequelize, sequelize) => {
+    return sequelize.define("passwords", {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true,
         },
-        fname: {
+        user_id: {
+            type: Sequelize.INTEGER,
+        },
+        site: {
             type: Sequelize.STRING,
         },
-        lname: {
-            type: Sequelize.STRING,
-        },
-        email: {
+        username: {
             type: Sequelize.STRING,
         },
         password: {
             type: Sequelize.STRING,
         },
-        refreshToken: {
+        strength: {
+            type: Sequelize.DOUBLE,
+        },
+        status: {
             type: Sequelize.STRING,
         },
-        apikey: {
-            type: Sequelize.STRING,
+        history: {
+            type: Sequelize.JSON,
         },
     })
 }
 
-export default user
+export default password

@@ -1,17 +1,18 @@
 import { Op } from 'sequelize'
-import { user } from '../models/index.js'
+import { user, password } from '../models/index.js'
 import bcrypt from 'bcryptjs'
 import multer from 'multer'
 import fs from 'fs'
+import axios from 'axios'
 
 export const updateUserInfo = async (req, res) => {
-    const { fname, lname, password } = req.body
+    const { fname, lname, apikey } = req.body
     try {
         const myUser = await user.findOne({ where: { id: req.user.id } })
         await myUser.update({
             fname: fname,
             lname: lname,
-            password: password
+            apikey: apikey,
         })
         res.send({ success: 'user information updated' })
     } catch {
@@ -64,12 +65,33 @@ export const updateProfilePic = async (req, res) => {
     }
 }
 
+export const scanExposure = async (req, res) => {
+    try {
+        const myUser = await user.findOne({ where: { id: req.user.id } })
+        const myPasswords = await password.findAll({ where: { user_id: req.user.id } })
+        const exposures = await Promise.all(myPasswords.map( async (pw) => {
+            const result = await axios.get(`https://api.enzoic.com/exposures?username=${pw.username}`, {
+                headers: {
+                    Accept: 'application/json', 'Accept-Encoding': 'identity',
+                    authorization: `basic ${Buffer.from(myUser.apikey + ':hAMZTqWN8hBn1+6JzGXg!6EaJEkFz!nT').toString('base64')}`
+                }
+            })
+            return result.data.count
+        }))
+        res.status(200).send(exposures)
+    } catch (err) {
+        console.log(err)
+        res.status(401).send('can not get exposed accounts')
+    }
+}
+
 const userinfo = (req, res) => {
     user.findOne({ where: { id: req.user.id } }).then((myUser) => {
-        res.status(200).send({ 
+        res.status(200).send({
             fname: myUser.fname,
             lname: myUser.lname, 
             email: myUser.email, 
+            apikey: myUser.apikey,
             pfp: myUser.pfpDir,
         })
     }).catch((err) => {

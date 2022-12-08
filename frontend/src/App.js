@@ -8,6 +8,8 @@ import Dashboard from './Pages/Dashboard.js'
 import PasswordEdit from './Pages/PasswordEdit.js'
 import Login from './Pages/Login.js'
 import NoPage from './Pages/NoPage.js'
+import PasswordCreate from './Pages/PasswordCreate.js'
+import AccountSettings from './Pages/AccountSettings'
 
 
 function App() {  
@@ -20,7 +22,10 @@ function App() {
               <Route element={ <PrivateRoute/> }>
                 <Route path='' element={ <Navigate to='/dashboard' /> } />
                 <Route path='dashboard' element={ <Dashboard /> } />
-                <Route path='password' element={ <PasswordEdit /> } />
+                <Route path='password/:id' element={ <PasswordEdit /> } />
+                <Route path='edit/:id' element={ <PasswordCreate /> } />
+                <Route path='account' element={ <AccountSettings /> } />
+                <Route path='new' element={ <PasswordCreate /> } />
                 <Route path='*' element={ <Navigate to='/dashboard' /> } />
               </Route>
             </Route>

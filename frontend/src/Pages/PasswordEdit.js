@@ -1,10 +1,20 @@
 import { Button, Divider, LinearProgress, Stack, Typography } from "@mui/material"
 import { Box } from "@mui/system"
+import LoadingButton from '@mui/lab/LoadingButton'
 
+import { useEffect, useState } from 'react'
+import { Navigate, useParams } from "react-router-dom"
+import { getPassword, scanPassword } from "../Api/PasswordAPI.js"
 
-const PasswordEdit = () => {
+import { useAuth } from '../Context/UserContext.js'
 
-    const passwordInfo = {
+const PasswordEdit = (props) => {
+
+    const { userInfo } = useAuth()
+
+    const { id } = useParams()
+    // const [passwordInfo, setPasswordInfo] = useState({})
+    const [passwordInfo, setPasswordInfo] = useState({
         site: 'www.google.com',
         username: 'username',
         tags: [
@@ -33,6 +43,19 @@ const PasswordEdit = () => {
                 action: 'login'
             },
         ],
+    })
+
+    useEffect(() => {
+        getPassword(id).then((result) => {
+            setPasswordInfo(result)
+        })
+        // scanPassword(id)
+    }, [userInfo])
+
+    const handleScanPassword = async () => {
+        console.log('tesdt')
+        await scanPassword(id)
+        window.location.reload()
     }
     
     return(
@@ -49,40 +72,97 @@ const PasswordEdit = () => {
                 spacing={2}
                 direction='row'
                 >
-                    <Box>
-                        {passwordInfo.favicon}
-                    </Box>
+                    <Box
+                        component="img"
+                        sx={{
+                        height: '52px',
+                        width: '52px',
+                        pt: 1,
+                        }}
+                        src={`${passwordInfo.site}/favicon.ico`}
+                    />
                     <Stack>
-                        <Typography>
-                            {passwordInfo.site}
-                        </Typography>
-                        <Typography>
-                            {passwordInfo.username}
-                        </Typography>
+                        <Stack
+                        direction='row'
+                        spacing={2}
+                        alignItems='flex-end'
+                        >
+                            <Typography
+                            variant='h6'
+                            >
+                                Site:
+                            </Typography>
+                            <Typography
+                            variant='subtitle1'
+                            >
+                                {passwordInfo.site}
+                            </Typography>
+                        </Stack>
+                        <Stack
+                        direction='row'
+                        spacing={2}
+                        alignItems='flex-end'
+                        >
+                            <Typography
+                            variant='h6'
+                            >
+                                Username:
+                            </Typography>
+                            <Typography
+                            variant='subtitle1'
+                            >
+                                {passwordInfo.username}
+                            </Typography>
+                        </Stack>
                     </Stack>
                 </Stack>
                 <Box>
                     {passwordInfo.status}
                 </Box>
                 <Button
-                variant='contained'
+                variant='outlined'
+                // loading={false}
+                onClick={handleScanPassword}
                 >
                     edit
                 </Button>
             </Stack>
-            <Stack>
-                <Typography>
-                    Password Strength: {passwordInfo.strength}
-                </Typography>
-                <Box
-                width='240px'
+            <Stack
+            direction='row'
+            justifyContent='space-between'
+            >
+                <Stack>
+                    <Stack
+                    direction='row'
+                    spacing={2}
+                    alignItems='flex-end'
+                    >
+                        <Typography
+                        variant='subtitle1'
+                        >
+                            Password Strength:
+                        </Typography>
+                        <Typography
+                        variant='h6'
+                        >
+                            {passwordInfo.strength > 1 ? 100 : passwordInfo.strength*100}%
+                        </Typography>
+                    </Stack>
+                    <Box
+                    width='240px'
+                    >
+                        <LinearProgress 
+                        variant='determinate'
+                        value={passwordInfo.strength > 1 ? 100 : passwordInfo.strength*100}
+                        sx={{ height: '16px', borderRadius: '64px' }}
+                        />
+                    </Box>
+                </Stack>
+                <Button
+                variant='contained'
                 >
-                    <LinearProgress 
-                    variant='determinate'
-                    value={passwordInfo.strength*100}
-                    sx={{ height: '16px', borderRadius: '64px' }}
-                    />
-                </Box>
+                    scan
+                </Button>
             </Stack>
             <Stack
             spacing={2}
@@ -99,7 +179,7 @@ const PasswordEdit = () => {
                     </Typography>
                 </Stack>
                 <Divider />
-                {passwordInfo.history.map((record, index) => (
+                {eval(passwordInfo.history)?.map((record, index) => (
                     <Stack
                     direction='row'
                     justifyContent='space-between'
@@ -108,7 +188,7 @@ const PasswordEdit = () => {
                     padding={2}
                     >
                         <Typography>
-                            {record.date}
+                            {new Date(record.date).toLocaleString()}
                         </Typography>
                         <Typography>
                             {record.action}

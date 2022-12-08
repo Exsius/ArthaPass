@@ -1,7 +1,22 @@
 import { user } from '../models/index.js'
+import jwt from 'jsonwebtoken'
 
 export const login = (req, res) => {
-    res.status(200).send({ user_id: req.user.id })
+    const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+    res.status(200).send({ user_id: req.user.id, refreshToken: token })
+    req.session.refreshToken = token
+    req.session.accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+}
+
+export const refreshToken = (user) => {
+    const { refreshToken } = req.body
+    if (req.session.refreshToken === refreshToken) {
+        const newToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+        req.session.accessToken = newToken
+        res.send(newToken)
+    } else {
+        res.send({ error: 'invalid refresh token' })
+    }
 }
 
 export const logout = async (req, res) => {

@@ -26,6 +26,11 @@ export const updateUserInfo = async (userInfo) => {
     return await axios.post('/api/user/updateInfo', userInfo)
 }
 
+export const scanUser = async () => {
+    const result = await axios.get('/api/user/scan')
+    return result.data
+}
+
 const userAPI = async (user) => {
     const result = await axios.get('/api/user')
     return result.data

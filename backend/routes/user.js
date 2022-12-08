@@ -1,4 +1,4 @@
-import userInfo, { updateUserInfo, changePassword, updateProfilePic } from '../controllers/user_controller.js'
+import userInfo, { updateUserInfo, changePassword, updateProfilePic, scanExposure } from '../controllers/user_controller.js'
 import { checkAuth } from '../middleware/auth_middleware.js'
 import multer from 'multer'
 import { storage } from '../configs/multer-config.js'
@@ -12,6 +12,8 @@ const user = (express, router) => {
     router.post('/user/changePassword', checkAuth, changePassword)
 
     router.post('/user/updateProfilePic', checkAuth, upload.single('profilePic'), updateProfilePic)
+
+    router.get('/user/scan', checkAuth, scanExposure)
 
 }
 

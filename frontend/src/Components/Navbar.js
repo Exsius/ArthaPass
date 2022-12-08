@@ -198,7 +198,7 @@ export const Navbar = (props) => {
     
     const pageTitles = {
         '/dashboard': {
-            name: 'Artha Pass',
+            name: 'Dashboard',
             mobileComponents: mobileComponents[0],
             headComponents: (
                 <Typography
@@ -217,6 +217,11 @@ export const Navbar = (props) => {
                     name: "Settings",
                     link: "/dashboard",
                     icon: <AccountCircleRoundedIcon color="inherit" />
+                },
+                {
+                    name: "New Password",
+                    link: "/new",
+                    icon: <AddCircleOutlineRoundedIcon color="inherit" />
                 },
             ],
             tailComponents: [
@@ -246,11 +251,6 @@ export const Navbar = (props) => {
             icon: <HomeRoundedIcon color="secondarydark" />,
             link: "/",
         },
-        {
-            name: "Notes",
-            icon: <NotesIcon color="secondarydark" />,
-            link: "/",
-        },
     ]
 
     const drawer = (
@@ -258,15 +258,21 @@ export const Navbar = (props) => {
             <Box sx={{ display: 'flex', flexDirection: 'column', height:"100vh"}}>
                 <Toolbar sx={{ pb: 1.5 }}>
                     <Box
-                        component="img"
+                        // component="img"
                         sx={{
                         height: 'auto',
                         width: '85%',
                         pt: 1.5,
                         }}
-                        alt='arthapass Logo'
-                        src='/arthapassbanner.png'
-                    />
+                        // alt='arthapass Logo'
+                        // src='/arthapassbanner.png'
+                    >
+                        <Typography 
+                        variant='h5'
+                        >
+                            Artha Pass
+                        </Typography>
+                    </Box>
                     {/* <Typography
                     variant="h4"
                     >

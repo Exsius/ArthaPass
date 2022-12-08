@@ -1,0 +1,23 @@
+{
+
+    "manifest_version": 2,
+    "name": "Artha Pass",
+    "version": "1.0",
+  
+    "description": "Extension for ArthaPass",
+  
+    "icons": {
+      "48": "icons/border-48.png"
+    },
+
+    "permissions": ["*://localhost/*"],
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*/*"],
+        "js": ["arthapass.js"]
+      }
+    ]
+  
+  }
+  
